@@ -12,8 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BookController.class)
@@ -58,4 +61,21 @@ public class BookControllerTest {
 
     }
 
+    @Test
+    void shouldReturn200AndListOfBooks_WhenTheGetAllBooksMethodIsCalled() throws Exception {
+        //given
+        List<Book> books = List.of(
+                new Book("Jumanji"),
+                new Book("Technogise")
+        );
+        when(bookService.findAll()).thenReturn(books);
+
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.get("/books")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].title").value("Jumanji"))
+                .andExpect(jsonPath("$[1].title").value("Technogise"));
+    }
 }
