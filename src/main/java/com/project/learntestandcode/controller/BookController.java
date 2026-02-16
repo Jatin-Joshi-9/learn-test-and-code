@@ -3,6 +3,7 @@ package com.project.learntestandcode.controller;
 import com.project.learntestandcode.dto.CreateBookRequest;
 import com.project.learntestandcode.model.Book;
 import com.project.learntestandcode.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody CreateBookRequest request){
+    public ResponseEntity<Book> addBook(@Valid @RequestBody CreateBookRequest request){
 
         Book createdBook = bookService.addBook(request.getTitle());
 

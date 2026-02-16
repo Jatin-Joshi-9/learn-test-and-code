@@ -41,5 +41,21 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.title").value("Harry Potter"));
 
     }
+    @Test
+    void shouldReturn400_WhenTitleIsBlank() throws Exception {
+        // given
+        String invalidJson = """
+        {
+            "title": ""
+        }
+        """;
+
+        // when + then
+        mockMvc.perform(MockMvcRequestBuilders.post("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidJson))
+                .andExpect(status().isBadRequest());
+
+    }
 
 }
