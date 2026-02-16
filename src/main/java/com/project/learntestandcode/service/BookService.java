@@ -2,6 +2,8 @@ package com.project.learntestandcode.service;
 
 import com.project.learntestandcode.model.Book;import com.project.learntestandcode.repository.BookRepository;import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookService {
     private final BookRepository bookRepository;
@@ -12,5 +14,9 @@ public class BookService {
 
     public Book addBook(String title) {
         return bookRepository.save(new Book(title));
+    }
+
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 }

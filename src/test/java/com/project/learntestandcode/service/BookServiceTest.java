@@ -8,9 +8,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -33,5 +37,35 @@ public class BookServiceTest {
         //Then
         assertEquals(book, addedBook);
         assertEquals(title, addedBook.getTitle());
+    }
+    @Test
+    void shouldReturnEmptyList_WhenThereIsNoBooksInTheLibraryRecord() {
+        // Given
+        List<Book> books = Collections.emptyList();
+        when(bookRepository.findAll()).thenReturn(books);
+
+        // When
+        List<Book> result = bookService.findAll();
+
+        // Then
+        assertTrue(result.isEmpty());
+        verify(bookRepository, times(1)).findAll();
+    }
+
+    @Test
+    void shouldReturnBooksList_WhenBooksAreInTheLibraryRecord() {
+        //Given
+        List<Book> books = Arrays.asList(
+                new Book("clean code"),
+                new Book("Last chance")
+        );
+        when(bookRepository.findAll()).thenReturn(books);
+
+        //When
+        List<Book> result = bookService.findAll();
+
+        //Then
+        assertEquals(books, result);
+        verify(bookRepository, times(1)).findAll();
     }
 }
